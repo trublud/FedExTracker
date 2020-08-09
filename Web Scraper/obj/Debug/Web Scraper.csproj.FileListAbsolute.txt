@@ -1,0 +1,18 @@
+o:\Documents\Visual Studio 2019\WebScraper-master\Web Scraper\obj\Debug\Web Scraper.csprojAssemblyReference.cache
+o:\Documents\Visual Studio 2019\WebScraper-master\Web Scraper\obj\Debug\Web_Scraper.WebScrapeDisplay.resources
+o:\Documents\Visual Studio 2019\WebScraper-master\Web Scraper\obj\Debug\Web Scraper.csproj.GenerateResource.cache
+o:\Documents\Visual Studio 2019\WebScraper-master\Web Scraper\obj\Debug\Web Scraper.csproj.CoreCompileInputs.cache
+o:\Documents\Visual Studio 2019\WebScraper-master\Web Scraper\bin\Debug\AngleSharp.dll
+o:\Documents\Visual Studio 2019\WebScraper-master\Web Scraper\bin\Debug\MetroFramework.dll
+o:\Documents\Visual Studio 2019\WebScraper-master\Web Scraper\bin\Debug\MetroFramework.Fonts.dll
+o:\Documents\Visual Studio 2019\WebScraper-master\Web Scraper\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+o:\Documents\Visual Studio 2019\WebScraper-master\Web Scraper\bin\Debug\System.Text.Encoding.CodePages.dll
+o:\Documents\Visual Studio 2019\WebScraper-master\Web Scraper\bin\Debug\AngleSharp.xml
+o:\Documents\Visual Studio 2019\WebScraper-master\Web Scraper\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+o:\Documents\Visual Studio 2019\WebScraper-master\Web Scraper\obj\Debug\Web Scraper.csproj.CopyComplete
+o:\Documents\Visual Studio 2019\WebScraper-master\Web Scraper\bin\Debug\FedExTracker.exe.config
+o:\Documents\Visual Studio 2019\WebScraper-master\Web Scraper\bin\Debug\FedExTracker.exe
+o:\Documents\Visual Studio 2019\WebScraper-master\Web Scraper\bin\Debug\FedExTracker.pdb
+o:\Documents\Visual Studio 2019\WebScraper-master\Web Scraper\obj\Debug\FedExTracker.Properties.Resources.resources
+o:\Documents\Visual Studio 2019\WebScraper-master\Web Scraper\obj\Debug\FedExTracker.exe
+o:\Documents\Visual Studio 2019\WebScraper-master\Web Scraper\obj\Debug\FedExTracker.pdb
