@@ -1,21 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Threading;
+﻿using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
-using System.Net.Http;
-using System.IO; 
-using AngleSharp.Dom;
-using AngleSharp.Text;
-using System.Windows.Forms;
-
-using System.Collections.Specialized;
-using System.Timers;
-using System.Media;
-using System.Drawing;
 using FedExTracker.Properties;
+using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Data;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Media;
+using System.Net.Http;
+using System.Threading;
+using System.Timers;
+using System.Windows.Forms;
 
 namespace Web_Scraper
 {
@@ -25,13 +23,14 @@ namespace Web_Scraper
         {
             InitializeComponent();
         }
-        int segundo = 0;
-        DateTime dt = new DateTime();
+
+        private int segundo = 0;
+        private DateTime dt = new DateTime();
         private string Title { get; set; }
         private string Url { get; set; }
-        string startsiteUrl = "https://www.bing.com/packagetrackingv2?packNum=";
-        string endsiteUrl = "&carrier=Fedex&FORM=PCKTR1";
-        string siteUrl = "https://www.bing.com/packagetrackingv2?packNum=771195477820&carrier=Fedex&FORM=PCKTR1";
+        private string startsiteUrl = "https://www.bing.com/packagetrackingv2?packNum=";
+        private string endsiteUrl = "&carrier=Fedex&FORM=PCKTR1";
+        private string siteUrl = "https://www.bing.com/packagetrackingv2?packNum=771195477820&carrier=Fedex&FORM=PCKTR1";
         public string[] QueryTerms { get; } = { "DATE" };
 
         private void Form1_Load(object sender, EventArgs e)
@@ -40,21 +39,20 @@ namespace Web_Scraper
 
             foreach (string val in mySettings.tnumbers)
                 comboBox1.Items.Add(val);
-        //    System.Timers.Timer aTimer = new System.Timers.Timer(6000); //one hour in milliseconds
+            //    System.Timers.Timer aTimer = new System.Timers.Timer(6000); //one hour in milliseconds
 
-               System.Timers.Timer aTimer = new System.Timers.Timer(60 * 60 * 1000); //one hour in milliseconds
+            System.Timers.Timer aTimer = new System.Timers.Timer(60 * 60 * 1000); //one hour in milliseconds
             aTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
             aTimer.Start();
             timer2.Start();
         }
+
         private async void OnTimedEvent(object source, ElapsedEventArgs e)
         {
-
             try
             {
                 if (checkBox1.Checked)
                 {
-
                     if (dataGridView1.InvokeRequired)
                     {
                         dataGridView1.Invoke(new MethodInvoker(delegate
@@ -70,29 +68,19 @@ namespace Web_Scraper
                     {
                         // dataGridView1.DataContext = employeesView;
                     }
-
-
-
-
-
-
                 }
             }
             catch (Exception err) { MessageBox.Show(err.Message.ToString()); }
-
-
         }
 
         private void StartCodeButton_Click(object sender, EventArgs e)
         {
-
             try
             {
                 while (dataGridView1.Rows.Count > 1)
                 {
                     dataGridView1.Rows.RemoveAt(0);
                 }
-
 
                 richTextBox.Text = "";
                 GetWebsite2();
@@ -118,13 +106,13 @@ namespace Web_Scraper
 
             GetScrapeResults(document);
         }
-        internal async void Getit()
-        {
 
+        internal async void Getit(string fedexid)
+        {
             CancellationTokenSource cancellationToken = new CancellationTokenSource();
 
             HttpClient httpClient = new HttpClient();
-            HttpResponseMessage request = await httpClient.GetAsync(startsiteUrl + comboBox1.Text + endsiteUrl);
+            HttpResponseMessage request = await httpClient.GetAsync(startsiteUrl + fedexid + endsiteUrl);
 
             cancellationToken.Token.ThrowIfCancellationRequested();
 
@@ -138,13 +126,12 @@ namespace Web_Scraper
 
             if (articleLink.Any())
             {
+                richTextBox.Text = "";
                 PrintResults(articleLink);
             }
             // GetResults(document, comboBox1.Text);
-
-
-
         }
+
         internal async void GetWebsite2()
         {
             try
@@ -177,8 +164,8 @@ namespace Web_Scraper
                 }
             }
             catch { }
-
         }
+
         internal async void GetWebsite()
         {
             foreach (var term in comboBox1.Items)
@@ -198,8 +185,6 @@ namespace Web_Scraper
 
                 GetResults(document, (string)term);
             }
-
-
         }
 
         private void GetResults2(IHtmlDocument document, string fedexid, string notes, string dated)
@@ -208,10 +193,8 @@ namespace Web_Scraper
             DataGridViewRow row = (DataGridViewRow)this.dataGridView1.Rows[0].Clone();
             try
             {
-
                 foreach (var term in QueryTerms)
                 {
-
                     //   articleLink = document.All.Where(x => ( x.ClassName == "  pt_location_cell pt_Cell" || x.ClassName == "pt_header pt_header_time") && (x.ParentElement.InnerHtml.Contains(term) || x.ParentElement.InnerHtml.Contains(term.ToLower())));
                     articleLink = document.All.Where(x => (x.ClassName == "pr-tr-currentState" || x.ClassName == "b_focusTextSmall" || x.ClassName == "  pt_location_cell pt_Cell" || x.ClassName == "  rpt_se_rm pt_Cell" || x.ClassName == "b_focusTextSmall"));
                     statusLink = document.All.Where(x => x.ClassName == "b_focusTextSmall" || x.ClassName == "pr-tr-currentState");
@@ -227,11 +210,8 @@ namespace Web_Scraper
 
                     DateTime futurDate = Convert.ToDateTime(dated);
                     DateTime TodayDate = DateTime.Now;
-                    var numberOfDays = (TodayDate - futurDate ).TotalDays;
+                    var numberOfDays = (TodayDate - futurDate).TotalDays;
 
-
-
-                  
                     if (numberOfDays >= 8)
                     {
                         dataGridView1.Rows[0].DefaultCellStyle.BackColor = Color.LightYellow;
@@ -247,17 +227,14 @@ namespace Web_Scraper
                             dataGridView1.Rows[0].DefaultCellStyle.BackColor = Color.LightGoldenrodYellow;
                         }
                     }
-                   
+
                     //        if (articleLink.Any())
                     {
                         //   PrintResults(articleLink);
                     }
                 }
-
             }
-
             catch (Exception err) { if (err.Message.ToString().Contains("Index was out of range. Must be non-negative and less than the size of the collection")) { richTextBox.Text = "Not Found"; dataGridView1.Rows.Insert(0, fedexid, "Not Found", notes, dated); } }
-
         }
 
         private void GetResults(IHtmlDocument document, string fedexid)
@@ -266,10 +243,8 @@ namespace Web_Scraper
             DataGridViewRow row = (DataGridViewRow)this.dataGridView1.Rows[0].Clone();
             try
             {
-
                 foreach (var term in QueryTerms)
                 {
-
                     //   articleLink = document.All.Where(x => ( x.ClassName == "  pt_location_cell pt_Cell" || x.ClassName == "pt_header pt_header_time") && (x.ParentElement.InnerHtml.Contains(term) || x.ParentElement.InnerHtml.Contains(term.ToLower())));
                     articleLink = document.All.Where(x => (x.ClassName == "pr-tr-currentState" || x.ClassName == "b_focusTextSmall" || x.ClassName == "  pt_location_cell pt_Cell" || x.ClassName == "  rpt_se_rm pt_Cell" || x.ClassName == "b_focusTextSmall"));
                     statusLink = document.All.Where(x => x.ClassName == "b_focusTextSmall" || x.ClassName == "pr-tr-currentState");
@@ -288,12 +263,10 @@ namespace Web_Scraper
                         //   PrintResults(articleLink);
                     }
                 }
-
             }
-
             catch (Exception err) { if (err.Message.ToString().Contains("Index was out of range. Must be non-negative and less than the size of the collection")) { richTextBox.Text = "Not Found"; dataGridView1.Rows.Insert(0, fedexid, "Not Found"); } }
-
         }
+
         private void GetScrapeResults(IHtmlDocument document)
         {
             IEnumerable<IElement> articleLink, statusLink, locLink, dateLink = null;
@@ -329,7 +302,6 @@ namespace Web_Scraper
             //    htmlResult = htmlResult.ReplaceFirst("</div>\n<hr></span>  ", "");
 
             ResultValidation(htmlResult);
-
         }
 
         private void ResultValidation(string htmlResult)
@@ -342,7 +314,6 @@ namespace Web_Scraper
 
         private void SplitResults(string htmlResult)
         {
-
             richTextBox.AppendText($"{htmlResult}" + Environment.NewLine);
             //    string[] splitResults = htmlResult.Split(' ');
             //        Url = splitResults[0];
@@ -354,6 +325,7 @@ namespace Web_Scraper
         {
             richTextBox.AppendText($"{Title} - {Url}{Environment.NewLine}");
         }
+
         private void SaveComboBoxValues()
         {
             Settings mySettings = new Settings();
@@ -364,12 +336,7 @@ namespace Web_Scraper
 
             mySettings.tnumbers = myValues;
             mySettings.Save();
-
         }
-
-
-
-
 
         private void comboBox1_KeyDown(object sender, KeyEventArgs e)
         {
@@ -384,7 +351,6 @@ namespace Web_Scraper
                     if (radioButton1.Checked)
                     {
                         toadd = comboBox1.Text + " From: ";
-
                     }
                     else
                     {
@@ -393,7 +359,6 @@ namespace Web_Scraper
                         radioButton2.Checked = false;
                     }
                     comboBox1.Items.Add(toadd + textBox1.Text);
-
                 }
 
                 SaveComboBoxValues();
@@ -406,10 +371,19 @@ namespace Web_Scraper
                 }
             }
         }
+
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            char[] delimiters = new char[] { ',' };
+            string[] parts = comboBox1.Text.ToString().Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+            Console.WriteLine(":::SPLIT, CHAR ARRAY:::");
+            for (int i = 0; i < parts.Length; i++)
+            {
+                //      MessageBox.Show(parts[i]);
+                //      Console.WriteLine(parts[i]);
+            }
 
-            Getit();
+            Getit(parts[0]);
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -421,8 +395,7 @@ namespace Web_Scraper
                 comboBox1.Items.Clear();
                 SaveComboBoxValues();
             }
-
-            }
+        }
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -433,7 +406,6 @@ namespace Web_Scraper
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
             if (radioButton1.Checked) radioButton2.Checked = false;
-
         }
 
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
@@ -443,7 +415,6 @@ namespace Web_Scraper
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-
         }
 
         private void textBox1_Click(object sender, EventArgs e)
@@ -468,9 +439,8 @@ namespace Web_Scraper
                         if (radioButton1.Checked)
                         {
                             toadd = comboBox1.Text + ", From: ";
-                        
-                            radioButton2.Checked = true;
 
+                            radioButton2.Checked = true;
                         }
                         else
                         {
@@ -478,8 +448,7 @@ namespace Web_Scraper
                             radioButton1.Checked = true;
                             radioButton2.Checked = false;
                         }
-                        comboBox1.Items.Add(toadd+ textBox1.Text + ", " +DateTime.Today.ToShortDateString());
-
+                        comboBox1.Items.Add(toadd + textBox1.Text + ", " + DateTime.Today.ToShortDateString());
                     }
 
                     SaveComboBoxValues();
@@ -500,25 +469,24 @@ namespace Web_Scraper
             if (timerb == System.Windows.Forms.DialogResult.No) timerbreak(59);
             if (timerb == System.Windows.Forms.DialogResult.Yes) timerbreak(14);
         }
+
         private void timerbreak(int howlong)
         {
-           
             System.Timers.Timer aTimer = new System.Timers.Timer(howlong * 60 * 1000);
             //   timer1.Tick += (s, ev) => { label1.Text = String.Format("{0:00}", ((DateTime.Now+howlong * 60 * 1000) - DateTime.Now ).Seconds); };
             //aTimer = DateTime.Now;
-                timer1.Interval = 1000;       // every 1/10 of a second
-              
+            timer1.Interval = 1000;       // every 1/10 of a second
+
             timer1.Enabled = true;
- timer1.Start();
+            timer1.Start();
             aTimer.Elapsed += new ElapsedEventHandler(OnTimedBreak);
             aTimer.Start();
         }
+
         private async void OnTimedBreak(object source, ElapsedEventArgs e)
         {
-
             try
             {
-
                 SystemSounds.Asterisk.Play();
                 Thread.Sleep(1000);
                 SystemSounds.Exclamation.Play();
@@ -534,8 +502,6 @@ namespace Web_Scraper
                 timer1.Start();
             }
             catch (Exception err) { MessageBox.Show(err.Message.ToString()); }
-
-
         }
 
         private void WebScrapeDisplay_FormClosing(object sender, FormClosingEventArgs e)
@@ -546,9 +512,9 @@ namespace Web_Scraper
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-
+            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            Clipboard.SetText(dataGridView1[e.ColumnIndex, e.RowIndex].Value.ToString());
         }
-       
 
         private void timer1_Tick_1(object sender, EventArgs e)
         {
@@ -558,19 +524,17 @@ namespace Web_Scraper
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-
         }
 
         private void timer2_Tick(object sender, EventArgs e)
         {
-
             DateTime timeUtc = DateTime.UtcNow;
             try
             {
                 TimeZoneInfo pstZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
                 TimeZoneInfo estZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
                 TimeZoneInfo aztZone = TimeZoneInfo.FindSystemTimeZoneById("US Mountain Standard Time");
-               TimeZoneInfo cstZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time");
+                TimeZoneInfo cstZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time");
                 DateTime pstTime = TimeZoneInfo.ConvertTimeFromUtc(timeUtc, pstZone);
                 DateTime aztTime = TimeZoneInfo.ConvertTimeFromUtc(timeUtc, aztZone);
                 DateTime cstTime = TimeZoneInfo.ConvertTimeFromUtc(timeUtc, cstZone);
@@ -592,16 +556,65 @@ namespace Web_Scraper
                 MessageBox.Show("Registry data on the Central Standard Time zone has been corrupted.");
             }
 
-
-
-
-
             TimeZone zone = TimeZone.CurrentTimeZone;
             // Demonstrate ToLocalTime and ToUniversalTime.
             DateTime local = zone.ToLocalTime(DateTime.Now);
             DateTime universal = zone.ToUniversalTime(DateTime.Now);
             // pstlbl.Text = "PST: " + zone.e(DateTime.Now));
             Console.WriteLine(universal);
+        }
+
+        private void dataGridView1_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+        }
+
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+        }
+
+        private void dataGridView1_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            // Ignore if a column or row header is clicked
+            if (e.RowIndex != -1 && e.ColumnIndex != -1)
+            {
+                if (e.Button == MouseButtons.Right)
+                {
+                    DataGridViewCell clickedCell = (sender as DataGridView).Rows[e.RowIndex].Cells[e.ColumnIndex];
+
+                    // Here you can do whatever you want with the cell
+                    this.dataGridView1.CurrentCell = clickedCell;  // Select the clicked cell, for instance
+                    clickedCell.Selected = true;
+                    dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+                    // Get mouse position relative to the vehicles grid
+                    var relativeMousePosition = dataGridView1.PointToClient(Cursor.Position);
+
+                    // Show the context menu
+                    this.contextMenuStrip1.Show(dataGridView1, relativeMousePosition);
+                }
+            }
+        }
+
+        private void copyAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DataGridViewSelectedRowCollection temp = dataGridView1.SelectedRows;
+            try
+            {
+                Int32 selectedRowCount =
+            dataGridView1.Rows.GetRowCount(DataGridViewElementStates.Selected);
+                if (selectedRowCount > 0)
+                {
+                    Clipboard.SetDataObject(
+                     this.dataGridView1.GetClipboardContent());
+                    //  MessageBox.Show(sb.ToString(), "Selected Rows");
+                }
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
+        }
+
+        private void richTextBox_DoubleClick(object sender, EventArgs e)
+        {
+            Clipboard.SetDataObject(
+                   comboBox1.Text + " " + richTextBox.Text);
         }
     }
 }

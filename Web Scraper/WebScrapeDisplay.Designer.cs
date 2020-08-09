@@ -58,7 +58,10 @@
             this.cstlbl = new System.Windows.Forms.Label();
             this.estlbl = new System.Windows.Forms.Label();
             this.timer2 = new System.Windows.Forms.Timer(this.components);
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.copyAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // StartCodeButton
@@ -83,6 +86,7 @@
             this.richTextBox.Size = new System.Drawing.Size(331, 202);
             this.richTextBox.TabIndex = 1;
             this.richTextBox.Text = "";
+            this.richTextBox.DoubleClick += new System.EventHandler(this.richTextBox_DoubleClick);
             // 
             // comboBox1
             // 
@@ -232,7 +236,10 @@
             this.dataGridView1.RowHeadersWidth = 72;
             this.dataGridView1.Size = new System.Drawing.Size(1101, 368);
             this.dataGridView1.TabIndex = 12;
+            this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
+            this.dataGridView1.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView1_CellMouseClick);
+            this.dataGridView1.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView1_CellMouseDown);
             // 
             // Tracking
             // 
@@ -380,6 +387,21 @@
             this.timer2.Interval = 1000;
             this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
             // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(28, 28);
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.copyAllToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(164, 40);
+            // 
+            // copyAllToolStripMenuItem
+            // 
+            this.copyAllToolStripMenuItem.Name = "copyAllToolStripMenuItem";
+            this.copyAllToolStripMenuItem.Size = new System.Drawing.Size(163, 36);
+            this.copyAllToolStripMenuItem.Text = "Copy All";
+            this.copyAllToolStripMenuItem.Click += new System.EventHandler(this.copyAllToolStripMenuItem_Click);
+            // 
             // WebScrapeDisplay
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
@@ -421,6 +443,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.WebScrapeDisplay_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -456,6 +479,8 @@
         private System.Windows.Forms.Label cstlbl;
         private System.Windows.Forms.Label estlbl;
         private System.Windows.Forms.Timer timer2;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem copyAllToolStripMenuItem;
     }
 }
 
